@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <h1>Dashboard</h1>
+
+    <div th:if="${user != null}">
+        <p><strong>Username:</strong> <span th:text="${user.name}">Anonymous</span></p>
+        <p><strong>Authorities:</strong>
+            <span th:each="auth : ${user.authorities}" th:text="${auth.authority}">ROLE_USER</span>
+        </p>
+        <p><strong>Details:</strong> <span th:text="${user.details}">N/A</span></p>
+    </div>
+
+    <div th:if="${user == null}">
+        <p>Utilisateur non connecté.</p>
+    </div>
+
+</body>
+
+</html>

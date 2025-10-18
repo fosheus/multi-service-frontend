@@ -1,7 +1,6 @@
 package fr.albanj.corelib.servicecore;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import fr.albanj.corelib.servicecore.filter.AuthProviderValidationFilter;
 import fr.albanj.corelib.servicecore.filter.RemoteAuthenticationFilter;
@@ -58,6 +58,9 @@ public class ServiceCoreConfiguration {
                 authProviderUrl);
         remoteAuthenticationFilter
                 .setAuthenticationSuccessHandler(new RemoteAuthenticationSuccessHandler(authSuccessRedirect));
+        remoteAuthenticationFilter.setRequiresAuthenticationRequestMatcher(
+                new AntPathRequestMatcher("/login", "POST") // 🔒 n'intercepte que POST /login
+        );
         return remoteAuthenticationFilter;
 
     }

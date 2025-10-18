@@ -10,7 +10,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>service-core</artifactId>
-	<name>service-core</name>
+	<name>corelib-service-core</name>
 	<description>service-core</description>
 	<packaging>jar</packaging>
 

@@ -1,17 +1,14 @@
 package fr.albanj.corelib.servicecore.filter;
 
 import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import fr.albanj.corelib.servicecore.LoginRequest;
@@ -35,6 +32,10 @@ public class RemoteAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
+
+        if (!"POST".equalsIgnoreCase(request.getMethod())) {
+            throw new AuthenticationServiceException("Méthode non supportée : " + request.getMethod());
+        }
 
         String username = obtainUsername(request);
         String password = obtainPassword(request);

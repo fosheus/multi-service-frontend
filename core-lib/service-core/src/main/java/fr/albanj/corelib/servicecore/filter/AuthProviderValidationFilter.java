@@ -52,7 +52,7 @@ public class AuthProviderValidationFilter extends OncePerRequestFilter {
             try {
                 ResponseEntity<Void> resp = restTemplate.postForEntity(authProviderUrl + "/api/valid",
                         new ValidRequest(token), Void.class);
-                if (resp.getStatusCode().is2xxSuccessful() && resp.getBody() != null) {
+                if (resp.getStatusCode().is2xxSuccessful()) {
                     UserAuthMetadata metadata = JwtUtils.parseTokenUnsecured(token);
 
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

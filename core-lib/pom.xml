@@ -12,7 +12,7 @@
 	<groupId>fr.albanj.corelib</groupId>
 	<artifactId>parent</artifactId>
 	<version>1.0.0</version>
-	<name>parent</name>
+	<name>corelib-parent</name>
 	<description>parent</description>
 	<packaging>pom</packaging>
 

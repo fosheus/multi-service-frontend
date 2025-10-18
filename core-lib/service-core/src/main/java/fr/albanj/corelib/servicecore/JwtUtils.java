@@ -2,14 +2,20 @@ package fr.albanj.corelib.servicecore;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 public class JwtUtils {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String generateToken(String secret, Duration sessionDuration, UserAuthMetadata tokenPayload) {
         return Jwts.builder()
@@ -42,23 +48,26 @@ public class JwtUtils {
     }
 
     public static UserAuthMetadata parseTokenUnsecured(String token) throws TokenExpiredException {
+        try {
+            String[] parts = token.split("\\.");
+            if (parts.length < 2) {
+                throw new IllegalArgumentException("JWT invalide (il doit contenir au moins deux parties)");
+            }
 
-        Claims claims = Jwts.parser()
-                .unsecured()
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+            // partie payload = 2e segment
+            String payloadJson = new String(Base64.getUrlDecoder().decode(parts[1]));
+            Map<String, Object> claims = objectMapper.readValue(payloadJson, Map.class);
 
-        if (claims.getExpiration().before(new Date())) {
-            throw new TokenExpiredException();
+            int loginId = ((Number) claims.getOrDefault("loginId", 0)).intValue();
+            String username = (String) claims.getOrDefault("sub", null);
+            String fullname = (String) claims.getOrDefault("fullname", null);
+
+            List<String> privileges = (List<String>) claims.getOrDefault("privileges", List.of());
+
+            return new UserAuthMetadata(loginId, username, fullname, privileges);
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors du parsing du JWT", e);
         }
-
-        return new UserAuthMetadata(
-                claims.get("loginId", Integer.class),
-                claims.getSubject(),
-                claims.get("fullname", String.class),
-                (List<String>) claims.get("privileges", List.class));
-
     }
 
 }

@@ -10,7 +10,7 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>app</artifactId>
-	<name>app</name>
+	<name>auth-provider-app</name>
 	<description>app</description>
 	<packaging>jar</packaging>
 
