@@ -1,2 +1,0 @@
-Projet destiné à POC un système en multi service avec un front par service, ainsi qu'un front portail permettant d'accéder à toutes les pages des services.
-Aussi le front portail sert de système d'authentification unique et transfert l'auth aux front
